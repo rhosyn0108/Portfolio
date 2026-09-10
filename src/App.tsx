@@ -17,6 +17,7 @@ import { CertificatesAndSkills } from './components/CertificatesAndSkills';
 import { FaqSection } from './components/FaqSection';
 import { Footer } from './components/Footer';
 import { ContactModal } from './components/ContactModal';
+import { profileData } from './data/portfolioData';
 import { PrintableResume } from './components/PrintableResume';
 import { LiveDemoModal } from './components/LiveDemoModal';
 
@@ -28,6 +29,13 @@ export default function App() {
   const [localPath, setLocalPath] = useState(
     'file:///c:/Users/User1/Desktop/AI데이터분석및업무자동화실무_강북/실습1_260820/market_channel_kpi.html'
   );
+  const [profilePhoto, setProfilePhoto] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('soyun_profile_photo');
+      if (saved) return saved;
+    }
+    return profileData.profileImage || '/profile_soyun.jpg';
+  });
 
   const handlePrintCv = () => {
     window.print();
@@ -60,6 +68,8 @@ export default function App() {
           <Hero
             language={language}
             onOpenContact={() => setContactOpen(true)}
+            profilePhoto={profilePhoto}
+            onUpdatePhoto={setProfilePhoto}
           />
 
           {/* Marquee Strip 1: Core Assurance Disciplines */}
@@ -121,7 +131,7 @@ export default function App() {
       </div>
 
       {/* Printable Clean A4 Resume for browser print / PDF export */}
-      <PrintableResume language={language} />
+      <PrintableResume language={language} profilePhoto={profilePhoto} />
     </div>
   );
 }

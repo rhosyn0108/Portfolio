@@ -20,6 +20,7 @@ export interface ProfileInfo {
   locationEn: string;
   bioKo: string;
   bioEn: string;
+  profileImage?: string;
 }
 
 export interface MetricStat {

@@ -91,7 +91,7 @@ export const CareerAndEducation: React.FC<CareerAndEducationProps> = ({ language
                   </div>
                   <div>
                     <div className="text-[11px] font-mono uppercase text-neutral-500">위치</div>
-                    <div className="font-bold text-neutral-900 mt-0.5">대한민국 서울 여의도 Two IFC</div>
+                    <div className="font-bold text-neutral-900 mt-0.5">대한민국 서울시 영등포구 국제금융로 10 One IFC</div>
                   </div>
                 </div>
 

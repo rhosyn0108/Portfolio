@@ -28,15 +28,16 @@ export const profileData: ProfileInfo = {
   locationKo: '대한민국 서울특별시 여의도',
   locationEn: 'Yeouido, Seoul, Republic of Korea',
   bioKo:
-    'IT 감사, IT 내부회계관리제도(ITGC/ITAC) 구축 및 운영평가, SOC 1 및 SOC 2 인증 분야의 탄탄한 실무 전문성을 보유한 딜로이트 안진회계법인 디지털 어슈어런스(Digital Assurance) 시니어 컨설턴트입니다. 영어영문학 및 글로벌문화산업·MICE 전공과 국가직무능력표준(NCS) 정보보안 전문 교육 과정을 바탕으로, 글로벌 비즈니스 커뮤니케이션 감각과 IT 보안 기술 역량을 유기적으로 결합하여 기업의 디지털 신뢰성과 시스템 통제 안정성을 극대화합니다.',
+    'IT 감사, IT 내부회계관리제도(ITGC/ITAC) 구축 및 운영평가, SOC 1 및 SOC 2 인증 분야의 탄탄한 실무 전문성을 보유한 딜로이트 안진회계법인 Digital Assurance 시니어 컨설턴트입니다. 영어영문학 및 글로벌문화산업·MICE 전공과 국가직무능력표준(NCS) 정보보안 전문 교육 과정을 바탕으로, 글로벌 비즈니스 커뮤니케이션 감각과 IT 보안 기술 역량을 유기적으로 결합하여 기업의 디지털 신뢰성과 시스템 통제 안정성을 극대화합니다.',
   bioEn:
     'Senior Consultant at Deloitte Anjin LLC (Audit & Assurance - Digital Assurance). Specialized in IT Audit, IT Internal Accounting Controls (ITGC/ITAC) implementation and operating effectiveness evaluation, and SOC 1/SOC 2 attestation. Combining an academic background in English Literature & Global Cultural Industry/MICE with intensive hands-on Security Engineering training, delivering high-impact assurance and digital governance for leading global and domestic enterprises.',
+  profileImage: '/profile_soyun.jpg',
 };
 
 export const metricStats: MetricStat[] = [
   {
     value: '3+ Yrs',
-    labelKo: '딜로이트 디지털 어슈어런스',
+    labelKo: '딜로이트 Digital Assurance',
     labelEn: 'Deloitte Digital Assurance',
     descKo: '대기업 및 금융/테크 기업 IT 내부통제 및 감사 수행',
     descEn: 'Enterprise IT internal control & assurance engagements',

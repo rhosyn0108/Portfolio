@@ -4,14 +4,15 @@ import { profileData, educationData, activitiesData, certificatesData } from '..
 
 interface PrintableResumeProps {
   language: Language;
+  profilePhoto?: string;
 }
 
-export const PrintableResume: React.FC<PrintableResumeProps> = ({ language }) => {
+export const PrintableResume: React.FC<PrintableResumeProps> = ({ language, profilePhoto }) => {
   return (
     <div id="printable-resume" className="hidden print:block font-sans text-black p-8 max-w-4xl mx-auto bg-white">
-      {/* Header */}
-      <div className="border-b-2 border-black pb-4 mb-6 flex justify-between items-end">
-        <div>
+      {/* Header with 3x4 Photo Slot */}
+      <div className="border-b-2 border-black pb-4 mb-6 flex justify-between items-start gap-4">
+        <div className="flex-1">
           <h1 className="text-3xl font-black tracking-tight">
             {profileData.nameKo} ({profileData.nameEn})
           </h1>
@@ -20,11 +21,28 @@ export const PrintableResume: React.FC<PrintableResumeProps> = ({ language }) =>
               ? 'IT 감사 & 보안 전문가 / 시니어 컨설턴트 (Deloitte Anjin Digital Assurance)'
               : 'IT Audit & Security Specialist / Senior Consultant (Deloitte Anjin LLC)'}
           </p>
+
+          <div className="mt-3 text-xs font-mono space-y-0.5 text-neutral-700">
+            <div>EMAIL: {profileData.email}</div>
+            <div>LINKEDIN: linkedin.com/in/soyun-rho-539a8921a</div>
+            <div>BIRTH: {profileData.birth}</div>
+          </div>
         </div>
-        <div className="text-right text-xs font-mono space-y-0.5">
-          <div>EMAIL: {profileData.email}</div>
-          <div>LINKEDIN: linkedin.com/in/soyun-rho-539a8921a</div>
-          <div>BIRTH: {profileData.birth}</div>
+
+        {/* 3x4cm Official Resume Photo Box */}
+        <div className="w-24 aspect-[3/4] border-2 border-neutral-800 flex flex-col items-center justify-center text-center overflow-hidden shrink-0 bg-neutral-50">
+          {profilePhoto ? (
+            <img
+              src={profilePhoto}
+              alt="증명사진 (3×4)"
+              className="w-full h-full object-cover object-top"
+            />
+          ) : (
+            <div className="p-1 text-[10px] font-mono text-neutral-500 flex flex-col items-center justify-center h-full">
+              <span className="font-bold text-neutral-700">사 진</span>
+              <span className="text-[9px] mt-0.5">(3 × 4 cm)</span>
+            </div>
+          )}
         </div>
       </div>
 

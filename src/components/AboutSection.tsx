@@ -72,7 +72,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
                     IT 감사, IT 내부회계관리제도 구축 및 운영,{' '}
                     <span className="bg-neutral-950 text-white px-1.5 py-0.5">SOC 1 / SOC 2 인증</span>{' '}
                     분야의 독보적 전문성을 보유한{' '}
-                    <span className="underline decoration-2 underline-offset-4">디지털 어슈어런스</span>{' '}
+                    <span className="underline decoration-2 underline-offset-4">Digital Assurance</span>{' '}
                     컨설턴트입니다.
                   </>
                 ) : (

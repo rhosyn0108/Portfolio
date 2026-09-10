@@ -50,7 +50,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ language, onOp
           <div className="mt-4 md:mt-0 flex items-center gap-3">
             <span className="text-xs font-mono uppercase text-neutral-500 tracking-wider">
               {language === 'ko'
-                ? '디지털 어슈어런스 & AI 데이터 분석 실무'
+                ? 'Digital Assurance & AI 데이터 분석 실무'
                 : 'DIGITAL ASSURANCE & DATA ANALYTICS'}
             </span>
             <button

@@ -39,7 +39,7 @@ export const ServicesAccordion: React.FC<ServicesAccordionProps> = ({ language }
             {language === 'ko' ? '핵심 서비스 & 자문' : 'CORE CAPABILITIES'}
           </div>
           <h2 className="font-editorial text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-neutral-950">
-            {language === 'ko' ? '디지털 어슈어런스 전문 분야' : 'WHAT I DO IN DIGITAL ASSURANCE'}
+            {language === 'ko' ? 'Digital Assurance 전문 분야' : 'WHAT I DO IN DIGITAL ASSURANCE'}
           </h2>
           <p className="mt-3 text-sm sm:text-base text-neutral-600 max-w-2xl font-medium">
             {language === 'ko'
