@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마케팅 채널 KPI 대시보드 — AI 데이터 분석 및 업무 자동화 실무</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif;
+    }
+    .font-mono {
+      font-family: 'Space Mono', monospace;
+    }
+  </style>
+</head>
+<body class="bg-[#0f1117] text-slate-100 min-h-screen antialiased">
+  <!-- Top Navigation / Banner -->
+  <header class="border-b border-slate-800 bg-[#161922] sticky top-0 z-30 px-4 lg:px-8 py-3.5">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-sm">
+          KPI
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/60">
+              실습1_260820
+            </span>
+            <span class="text-xs text-slate-400 font-mono">market_channel_kpi.html</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-bold text-white tracking-tight">
+            AI 데이터 분석 및 업무 자동화 실무 — 마케팅 채널 KPI 대시보드
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-slate-400">
+          분석자: <strong class="text-slate-200">노소윤 (Soyun Rho)</strong>
+        </span>
+        <button onclick="refreshData()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded border border-slate-700 transition flex items-center gap-1.5 text-slate-200 cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          데이터 새로고침
+        </button>
+        <button onclick="exportCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-xs font-bold rounded text-white transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          CSV 내보내기
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 space-y-6">
+    <!-- Filters & Period Bar -->
+    <div class="bg-[#161922] p-4 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex flex-wrap items-center gap-3">
+        <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">분석 기간:</label>
+        <div class="inline-flex rounded-lg bg-slate-900 p-1 border border-slate-800 text-xs">
+          <button class="px-3 py-1 rounded-md bg-emerald-600 text-white font-medium">최근 30일 (당월)</button>
+          <button class="px-3 py-1 rounded-md text-slate-400 hover:text-white font-medium">전월 대비</button>
+          <button class="px-3 py-1 rounded-md text-slate-400 hover:text-white font-medium">Q3 분기 누적</button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          AI 이상 징후 모니터링: 정상
+        </span>
+        <span class="text-xs font-mono text-slate-500">최종 동기화: 오늘 09:30</span>
+      </div>
+    </div>
+
+    <!-- KPI Metric Summary Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+      <!-- Total Spend -->
+      <div class="bg-[#161922] p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+        <div class="text-xs text-slate-400 font-medium">총 마케팅 집행비</div>
+        <div class="text-xl sm:text-2xl font-black text-white mt-1">₩48.5M</div>
+        <div class="text-[11px] text-emerald-400 mt-1 font-semibold flex items-center gap-1">
+          <span>▲ 12.4%</span>
+          <span class="text-slate-500 font-normal">vs 전월</span>
+        </div>
+      </div>
+
+      <!-- Total Revenue -->
+      <div class="bg-[#161922] p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+        <div class="text-xs text-slate-400 font-medium">채널 기여 매출액</div>
+        <div class="text-xl sm:text-2xl font-black text-emerald-400 mt-1">₩185.3M</div>
+        <div class="text-[11px] text-emerald-400 mt-1 font-semibold flex items-center gap-1">
+          <span>▲ 28.6%</span>
+          <span class="text-slate-500 font-normal">vs 전월</span>
+        </div>
+      </div>
+
+      <!-- Average ROAS -->
+      <div class="bg-[#161922] p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+        <div class="text-xs text-slate-400 font-medium">평균 광고 ROAS</div>
+        <div class="text-xl sm:text-2xl font-black text-indigo-400 mt-1">382%</div>
+        <div class="text-[11px] text-emerald-400 mt-1 font-semibold flex items-center gap-1">
+          <span>▲ +48%p</span>
+          <span class="text-slate-500 font-normal">목표 초과</span>
+        </div>
+      </div>
+
+      <!-- Total Acquisitions / Conversions -->
+      <div class="bg-[#161922] p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+        <div class="text-xs text-slate-400 font-medium">신규 고객 획득</div>
+        <div class="text-xl sm:text-2xl font-black text-white mt-1">3,842명</div>
+        <div class="text-[11px] text-emerald-400 mt-1 font-semibold flex items-center gap-1">
+          <span>▲ 18.2%</span>
+          <span class="text-slate-500 font-normal">전환 증가</span>
+        </div>
+      </div>
+
+      <!-- CAC -->
+      <div class="bg-[#161922] p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+        <div class="text-xs text-slate-400 font-medium">고객 획득 비용 (CAC)</div>
+        <div class="text-xl sm:text-2xl font-black text-amber-400 mt-1">₩12,623</div>
+        <div class="text-[11px] text-emerald-400 mt-1 font-semibold flex items-center gap-1">
+          <span>▼ 5.2%</span>
+          <span class="text-slate-500 font-normal">비용 효율화</span>
+        </div>
+      </div>
+
+      <!-- Conversion Rate (CVR) -->
+      <div class="bg-[#161922] p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+        <div class="text-xs text-slate-400 font-medium">평균 전환율 (CVR)</div>
+        <div class="text-xl sm:text-2xl font-black text-white mt-1">4.68%</div>
+        <div class="text-[11px] text-emerald-400 mt-1 font-semibold flex items-center gap-1">
+          <span>▲ +0.85%p</span>
+          <span class="text-slate-500 font-normal">개선</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Spend vs Revenue by Channel -->
+      <div class="lg:col-span-7 bg-[#161922] p-5 rounded-xl border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider">채널별 집행 비용 대비 기여 매출 (Spend vs Revenue)</h2>
+            <p class="text-xs text-slate-400">네이버, 구글, 메타, 카카오, 유튜브 및 오가닉 성과 비교</p>
+          </div>
+          <span class="text-xs font-mono text-slate-500">단위: 백만원(M)</span>
+        </div>
+        <div class="h-64 sm:h-72">
+          <canvas id="channelChart"></canvas>
+        </div>
+      </div>
+
+      <!-- ROAS & Conversion Trend -->
+      <div class="lg:col-span-5 bg-[#161922] p-5 rounded-xl border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider">주차별 ROAS 및 전환율 추이</h2>
+            <p class="text-xs text-slate-400">자동화 최적화 룰 적용 후 추세 분석</p>
+          </div>
+          <span class="text-xs font-mono text-emerald-400">W1 ~ W4</span>
+        </div>
+        <div class="h-64 sm:h-72">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Channel Performance Data Table -->
+    <div class="bg-[#161922] rounded-xl border border-slate-800 overflow-hidden">
+      <div class="p-4 sm:p-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-sm font-bold text-white uppercase tracking-wider">
+            마케팅 채널별 세부 성과 지표 (Channel Performance Matrix)
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">
+            광고비, 노출수, 클릭률(CTR), 클릭당비용(CPC), 전환수, ROAS 및 고객획득비용(CAC) 실시간 집계
+          </p>
+        </div>
+        <div class="text-xs font-mono text-slate-400">
+          총 6개 주요 유입 채널 모니터링 중
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-900 text-slate-400 font-mono text-[11px] uppercase border-b border-slate-800">
+            <tr>
+              <th class="px-4 py-3 font-semibold">채널명 (Channel)</th>
+              <th class="px-4 py-3 font-semibold text-right">집행금액 (Spend)</th>
+              <th class="px-4 py-3 font-semibold text-right">노출수 (Impr)</th>
+              <th class="px-4 py-3 font-semibold text-right">클릭수 (Clicks)</th>
+              <th class="px-4 py-3 font-semibold text-right">CTR</th>
+              <th class="px-4 py-3 font-semibold text-right">CPC</th>
+              <th class="px-4 py-3 font-semibold text-right">전환수 (Conv)</th>
+              <th class="px-4 py-3 font-semibold text-right">CVR</th>
+              <th class="px-4 py-3 font-semibold text-right">매출액 (Revenue)</th>
+              <th class="px-4 py-3 font-semibold text-right">ROAS</th>
+              <th class="px-4 py-3 font-semibold text-right">CAC</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-slate-800 text-slate-300">
+            <!-- Rendered by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AI Automation & Analysis Insights -->
+    <div class="bg-[#161922] p-5 sm:p-6 rounded-xl border border-slate-800">
+      <div class="flex items-center gap-2 mb-4 pb-3 border-b border-slate-800">
+        <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+        <h2 class="text-sm font-bold text-white uppercase tracking-wider">
+          AI 데이터 분석 및 업무 자동화 실무 인사이트 요약
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="p-4 bg-slate-900/80 rounded-lg border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-emerald-400 uppercase tracking-wider">01. 예산 최적화 추천</span>
+            <span class="text-[10px] font-mono text-slate-500">Auto-Optimization</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            <strong>네이버 검색광고</strong>와 <strong>구글 Demand Gen</strong>의 ROAS가 각각 420%, 410%로 타 채널 대비 월등히 높습니다. 메타 캠페인 예산 중 성과 저조 그룹 15%를 검색광고로 자동 리밸런싱할 것을 제안합니다.
+          </p>
+        </div>
+
+        <div class="p-4 bg-slate-900/80 rounded-lg border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-indigo-400 uppercase tracking-wider">02. 이상치 자동 감지</span>
+            <span class="text-[10px] font-mono text-slate-500">Anomaly Detection</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            카카오 비즈보드의 최근 3일간 CTR이 1.15%에서 0.78%로 급감하는 이상 징후를 머신러닝 모델이 감지했습니다. 소재 피로도(Ad Fatigue)로 판단되며 신규 배너 카피 자동 교체가 권장됩니다.
+          </p>
+        </div>
+
+        <div class="p-4 bg-slate-900/80 rounded-lg border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 uppercase tracking-wider">03. 채널 연계 전환 기여도</span>
+            <span class="text-[10px] font-mono text-slate-500">MTA Attribution</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            유튜브 영상 광고를 최초 접한 사용자가 네이버 브랜드 검색을 통해 유입되어 최종 결제하는 기여도가 38.4%에 달합니다. 단순 단일채널 CVR 외 멀티터치 기여도 가중치를 반영했습니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-800 bg-[#161922] py-6 text-center text-xs text-slate-500 mt-12 font-mono">
+    <p>AI데이터분석및업무자동화실무_강북 / 실습1_260820 / market_channel_kpi.html</p>
+    <p class="mt-1">Designed & Implemented by Soyun Rho (노소윤) · Deloitte Anjin Senior Consultant</p>
+  </footer>
+
+  <script>
+    const channelData = [
+      {
+        channel: '네이버 검색광고 (Naver Search)',
+        spend: 14500000,
+        impr: 420000,
+        clicks: 21500,
+        ctr: '5.12%',
+        cpc: 674,
+        conv: 1350,
+        cvr: '6.28%',
+        revenue: 60900000,
+        roas: '420%',
+        cac: 10740
+      },
+      {
+        channel: '구글 검색 & Demand Gen (Google)',
+        spend: 12000000,
+        impr: 380000,
+        clicks: 17200,
+        ctr: '4.53%',
+        cpc: 698,
+        conv: 1020,
+        cvr: '5.93%',
+        revenue: 49200000,
+        roas: '410%',
+        cac: 11764
+      },
+      {
+        channel: '메타 인스타그램/FB (Meta Ads)',
+        spend: 11000000,
+        impr: 850000,
+        clicks: 23800,
+        ctr: '2.80%',
+        cpc: 462,
+        conv: 780,
+        cvr: '3.28%',
+        revenue: 37400000,
+        roas: '340%',
+        cac: 14102
+      },
+      {
+        channel: '카카오 모먼트 (Kakao Moment)',
+        spend: 5500000,
+        impr: 410000,
+        clicks: 4300,
+        ctr: '1.05%',
+        cpc: 1279,
+        conv: 290,
+        cvr: '6.74%',
+        revenue: 17600000,
+        roas: '320%',
+        cac: 18965
+      },
+      {
+        channel: '유튜브 동영상 광고 (YouTube)',
+        spend: 4500000,
+        impr: 520000,
+        clicks: 6800,
+        ctr: '1.31%',
+        cpc: 662,
+        conv: 242,
+        cvr: '3.56%',
+        revenue: 12150000,
+        roas: '270%',
+        cac: 18595
+      },
+      {
+        channel: '오가닉 / 검색 추천 (Organic & SEO)',
+        spend: 1000000,
+        impr: 210000,
+        clicks: 12400,
+        ctr: '5.90%',
+        cpc: 81,
+        conv: 160,
+        cvr: '1.29%',
+        revenue: 8020000,
+        roas: '802%',
+        cac: 6250
+      }
+    ];
+
+    function renderTable() {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = channelData.map(row => `
+        <tr class="hover:bg-slate-800/50 transition font-mono">
+          <td class="px-4 py-3 font-sans font-semibold text-white">${row.channel}</td>
+          <td class="px-4 py-3 text-right">₩${(row.spend / 1000000).toFixed(1)}M</td>
+          <td class="px-4 py-3 text-right text-slate-400">${row.impr.toLocaleString()}</td>
+          <td class="px-4 py-3 text-right">${row.clicks.toLocaleString()}</td>
+          <td class="px-4 py-3 text-right text-emerald-400 font-bold">${row.ctr}</td>
+          <td class="px-4 py-3 text-right">₩${row.cpc.toLocaleString()}</td>
+          <td class="px-4 py-3 text-right font-bold text-white">${row.conv.toLocaleString()}</td>
+          <td class="px-4 py-3 text-right text-indigo-400 font-bold">${row.cvr}</td>
+          <td class="px-4 py-3 text-right font-bold text-emerald-400">₩${(row.revenue / 1000000).toFixed(1)}M</td>
+          <td class="px-4 py-3 text-right font-black text-amber-300">${row.roas}</td>
+          <td class="px-4 py-3 text-right text-slate-300">₩${row.cac.toLocaleString()}</td>
+        </tr>
+      `).join('');
+    }
+
+    let channelChartInstance = null;
+    let trendChartInstance = null;
+
+    function renderCharts() {
+      const ctx1 = document.getElementById('channelChart').getContext('2d');
+      channelChartInstance = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ['네이버', '구글', '메타', '카카오', '유튜브', '오가닉'],
+          datasets: [
+            {
+              label: '집행 광고비 (백만원)',
+              data: [14.5, 12.0, 11.0, 5.5, 4.5, 1.0],
+              backgroundColor: 'rgba(148, 163, 184, 0.4)',
+              borderColor: 'rgba(148, 163, 184, 0.8)',
+              borderWidth: 1,
+              borderRadius: 4
+            },
+            {
+              label: '기여 매출액 (백만원)',
+              data: [60.9, 49.2, 37.4, 17.6, 12.15, 8.02],
+              backgroundColor: 'rgba(16, 185, 129, 0.7)',
+              borderColor: 'rgba(16, 185, 129, 1)',
+              borderWidth: 1,
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#94a3b8', font: { size: 11, family: 'Space Mono' } }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#94a3b8', font: { family: 'Noto Sans KR' } },
+              grid: { color: '#1e293b' }
+            },
+            y: {
+              ticks: { color: '#94a3b8', font: { family: 'Space Mono' } },
+              grid: { color: '#1e293b' }
+            }
+          }
+        }
+      });
+
+      const ctx2 = document.getElementById('trendChart').getContext('2d');
+      trendChartInstance = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: ['1주차', '2주차', '3주차', '4주차 (현재)'],
+          datasets: [
+            {
+              label: '평균 ROAS (%)',
+              data: [310, 335, 360, 382],
+              borderColor: '#818cf8',
+              backgroundColor: 'rgba(129, 140, 248, 0.1)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: '전환율 CVR (x100 %)',
+              data: [3.8, 4.1, 4.4, 4.68],
+              borderColor: '#34d399',
+              borderDash: [5, 5],
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#94a3b8', font: { size: 11, family: 'Space Mono' } }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#94a3b8', font: { family: 'Noto Sans KR' } },
+              grid: { color: '#1e293b' }
+            },
+            y: {
+              ticks: { color: '#94a3b8', font: { family: 'Space Mono' } },
+              grid: { color: '#1e293b' }
+            }
+          }
+        }
+      });
+    }
+
+    function refreshData() {
+      alert('AI 데이터 파이프라인 동기화 완료: 최신 마케팅 채널 로그 및 전환 지표가 갱신되었습니다.');
+    }
+
+    function exportCSV() {
+      let csv = '채널명,집행금액,노출수,클릭수,CTR,CPC,전환수,CVR,매출액,ROAS,CAC\n';
+      channelData.forEach(row => {
+        csv += `"${row.channel}",${row.spend},${row.impr},${row.clicks},${row.ctr},${row.cpc},${row.conv},${row.cvr},${row.revenue},${row.roas},${row.cac}\n`;
+      });
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'market_channel_kpi_report.csv';
+      link.click();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTable();
+      renderCharts();
+    });
+  </script>
+</body>
+</html>
